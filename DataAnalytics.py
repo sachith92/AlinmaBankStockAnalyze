@@ -11,7 +11,7 @@ def preprocess(filename):
         for columns in rows:
             if columns == '':
                 dataFrame.drop(index, inplace=True)
-                print("Dropped Index: " + index)
+                print("Dropped Index: %d", index)
 
     """ Normalize Data Set """
     dataFrame.Open = minmaxnormalization(dataFrame.Open)
