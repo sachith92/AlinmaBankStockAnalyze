@@ -1,15 +1,16 @@
 import pandas as pd
-import array 
 
-def preProcessData(filename):
+
+def preprocess(filename):
     data = pd.read_excel(filename)
-    df = pd.DataFrame(data, columns=['Time', 'Open', 'Close', 'Chgange', 'PercentChange'])
+    df = pd.DataFrame(data, columns=['Time', 'Open', 'Close', 'Chg', 'PctChg'])
 
     dataDictionary = {}
     for index, row in df.iterrows():
-        dataDictionary[row['Time']] = datarow = {'Open': row['Open'], 'Close':row['Close'], 'Change':row['Chgange'], 'PercentChange':row['PercentChange']}
+        dataDictionary[row['Time']] = datarow = {'Open': row['Open'], 'Close': row['Close'], 'Change': row['Chg'],
+                                                 'PercentChange': row['PctChg']}
 
     return dataDictionary
 
 
-print(preProcessData('1150.xlsx'))
+print(preprocess('1150.xlsx'))
