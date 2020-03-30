@@ -12,5 +12,4 @@ def preprocess(filename):
 
     return dataDictionary
 
-
 print(preprocess('1150.xlsx'))
