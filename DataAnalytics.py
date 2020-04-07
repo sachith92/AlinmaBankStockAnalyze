@@ -14,14 +14,16 @@ def min_max_normalization(dataFrame):
 
 
 def preprocess(filename, bIsNormalize):
-    dataFrame = pd.read_excel(filename, usecols=['Time', 'Open', 'Close', 'Chg', 'PctChg', 'Turnover'])
+    data_frame = pd.read_excel(filename, usecols=['Time', 'Open', 'Close', 'Chg', 'PctChg', 'Turnover'])
 
-    # Drop any empty data points in the excel
-    for index, rows in dataFrame.iterrows():
-        for columns in rows:
-            if columns == '' and columns == 0:
-                dataFrame.drop(index, inplace=True)
-                print("Dropped Index: %d", index)
+    # # Drop any empty data points in the excel
+    # for index, rows in dataFrame.iterrows():
+    #     for columns in rows:
+    #         if columns == '' and columns == 0:
+    #             dataFrame.drop(index, inplace=True)
+    #             print("Dropped Index: %d", index)
+
+    dataFrame = data_frame.dropna()
 
     """ 
     Normalize Data Set if needed
@@ -43,4 +45,4 @@ def preprocess(filename, bIsNormalize):
     return dataDictionary
 
 
-#preprocess('1150.xlsx', False)
+#print(preprocess('1150.xlsx', False))
