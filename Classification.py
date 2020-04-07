@@ -84,7 +84,7 @@ def create_models(train_data, test_data):
     x_train, y_train = create_data_for_model(train_data)
     x_test, y_test = create_data_for_model(test_data)
 
-    logistic_egression(x_train, x_test, y_train, y_test)
+    logistic_regression(x_train, x_test, y_train, y_test)
     naive_bayes_classifier(x_train, x_test, y_train, y_test)
     k_nearest_neighbour(x_train, x_test, y_train, y_test)
     decision_tree(x_train, x_test, y_train, y_test)
