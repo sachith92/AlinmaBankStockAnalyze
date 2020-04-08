@@ -14,33 +14,31 @@ def min_max_normalization(dataFrame):
 
 
 def preprocess(filename, bIsNormalize):
-    dataFrame = pd.read_excel(filename, usecols=['Time', 'Open', 'Close', 'Chg', 'PctChg', 'Turnover'])
+    dataFrame = pd.read_excel(filename,
+                              usecols=['TRANSACTION_DATE', 'THEORETICAL_OPEN_RATIO', 'PCT_CHANGE'])
 
     # Drop any empty data points in the excel
     for index, rows in dataFrame.iterrows():
         for columns in rows:
-            if columns == '' and columns == 0:
+            if columns == 1000 or columns == 0:
                 dataFrame.drop(index, inplace=True)
-                print("Dropped Index: %d", index)
+                print("Dropped Index:", index)
+                break
 
-    """ 
+    dataFrame = dataFrame.dropna()
+    """
     Normalize Data Set if needed
     """
     if bIsNormalize:
-        dataFrame.Open = min_max_normalization(dataFrame.Open)
-        dataFrame.Close = min_max_normalization(dataFrame.Close)
-        dataFrame.Chg = min_max_normalization(dataFrame.Chg)
-        dataFrame.PctChg = min_max_normalization(dataFrame.PctChg)
-        dataFrame.Turnover = min_max_normalization(dataFrame.Turnover)
+        dataFrame.CUSTOMIZE = min_max_normalization(dataFrame.CUSTOMIZE)
 
     # Insert data to data dictionary
     dataDictionary = {}
     for index, row in dataFrame.iterrows():
-        dataDictionary[row['Time'].strip()] = datarow = {'Open': row['Open'], 'Close': row['Close'],
-                                                         'Change': row['Chg'],
-                                                         'PercentChange': row['PctChg'], 'Turnover': row['Turnover']}
+        dataDictionary[row['TRANSACTION_DATE']] = datarow = {'THEORETICAL_OPEN_RATIO': row['THEORETICAL_OPEN_RATIO'],
+                                                             'PCT_CHANGE': row['PCT_CHANGE']}
 
     return dataDictionary
 
 
-#preprocess('1150.xlsx', False)
+# preprocess('1150_HISTORY_ADJUSTED_2018.xlsx', False)

@@ -1,50 +1,54 @@
 from DataAnalytics import preprocess
-import numpy as np
 from scipy.stats import spearmanr
 from scipy.stats import pearsonr
+import matplotlib.pyplot as plt
 
 
-def Correlation(filename):
-    dict_data = preprocess(filename, False)
-
-    open_value = []
-    close_value = []
-    pct_change = []
-    avg_open_close = []
-    turn_over = []
+def Correlation(dict_data, feature_variable, target_variable, b_plot_data):
+    feature_vector = []
+    target_vector = []
 
     for key in dict_data:
-        if dict_data[key].get('Close') != 0 and dict_data[key].get('Open') != 0:
-            open_value.append(dict_data[key].get('Open'))
-            close_value.append(dict_data[key].get('Close'))
-            pct_change.append(dict_data[key].get('PercentChange'))
-            avg_open_close.append(
-                (dict_data[key].get('Open') + dict_data[key].get('Close')) / dict_data[key].get('Open'))
-            turn_over.append(dict_data[key].get('Turnover'))
+        if dict_data[key].get(feature_variable) != 0 and dict_data[key].get(target_variable) != 0:
+            feature_vector.append(dict_data[key].get(feature_variable))
+            target_vector.append(dict_data[key].get(target_variable))
 
-    corr, _ = spearmanr(open_value, pct_change)
-    print("Spearman Correlation: %.3f" % corr)
+    corr, _ = spearmanr(feature_vector, target_vector)
+    print("Spearman Correlation [" + feature_variable + "] Vs [ " + target_variable + " ] : %.3f" % corr)
 
-    pcorr, _ = pearsonr(open_value, pct_change)
-    print("Pearson Correlation: %.3f" % pcorr)
+    pcorr, _ = pearsonr(feature_vector, target_vector)
+    print("Pearson Correlation [" + feature_variable + "] Vs [ " + target_variable + " ] : %.3f" % pcorr)
 
-    corr2, _ = spearmanr(close_value, pct_change)
-    print("Spearman Correlation: %.3f" % corr2)
+    if b_plot_data:
+        title= feature_variable + ' Vs ' + target_variable
+        plt.scatter(feature_vector, target_vector)
+        plt.title("[%s]" % title)
+        plt.xlabel(" [ %s ] " % feature_variable)
+        plt.ylabel(" [ %s ] " % target_variable)
+        plt.show()
 
-    pcorr2, _ = pearsonr(close_value, pct_change)
-    print("Pearson Correlation: %.3f" % pcorr2)
-
-    corr3, _ = spearmanr(avg_open_close, pct_change)
-    print("Spearman Correlation: %.3f" % corr2)
-
-    pcorr3, _ = pearsonr(avg_open_close, pct_change)
-    print("Pearson Correlation: %.3f" % pcorr3)
-
-    corr4, _ = spearmanr(turn_over, pct_change)
-    print("Spearman Correlation: %.3f" % corr4)
-
-    pcorr4, _ = pearsonr(turn_over, pct_change)
-    print("Pearson Correlation: %.3f" % pcorr4)
+    return feature_vector, target_vector
 
 
-Correlation('1150.xlsx')
+def CreateModel(dataset):
+    x = []
+    y = []
+
+    for key in dataset:
+        row = []
+
+        row.append(dataset[key].get('Open'))
+        row.append(dataset[key].get('Close'))
+
+        pct_change = dataset[key].get('PctChg')
+        if pct_change >= 0.0:
+            y.append(1)
+        else:
+            y.append(0)
+
+        x.append(row)
+
+
+data_dict = preprocess('1150_HISTORY_ADJUSTED_2018.xlsx', False)
+
+Correlation(data_dict, "THEORETICAL_OPEN_RATIO", "PCT_CHANGE", True)
