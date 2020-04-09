@@ -15,7 +15,7 @@ def min_max_normalization(dataFrame):
 
 def preprocess(filename, bIsNormalize):
     dataFrame = pd.read_excel(filename,
-                              usecols=['TRANSACTION_DATE', 'THEORETICAL_OPEN_RATIO', 'PCT_CHANGE'])
+                              usecols=['TRANSACTION_DATE', 'THEORETICAL_OPEN_RATIO', 'PCT_CHANGE', 'OPEN', 'CLOSE'])
 
     # Drop any empty data points in the excel
     for index, rows in dataFrame.iterrows():
@@ -36,7 +36,9 @@ def preprocess(filename, bIsNormalize):
     dataDictionary = {}
     for index, row in dataFrame.iterrows():
         dataDictionary[row['TRANSACTION_DATE']] = datarow = {'THEORETICAL_OPEN_RATIO': row['THEORETICAL_OPEN_RATIO'],
-                                                             'PCT_CHANGE': row['PCT_CHANGE']}
+                                                             'PCT_CHANGE': row['PCT_CHANGE'],
+                                                             'OPEN': row['OPEN'],
+                                                             'CLOSE': row['CLOSE']}
 
     return dataDictionary
 
